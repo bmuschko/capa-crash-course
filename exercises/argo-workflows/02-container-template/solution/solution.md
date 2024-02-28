@@ -58,6 +58,22 @@ STEP                  TEMPLATE     PODNAME            DURATION  MESSAGE
  ✔ hello-world-n7dqt  hello-world  hello-world-n7dqt  4s
 ```
 
+To retrieve the logs of the last workflow execution, run the following command.
+
+```
+$ argo logs -n argo -f @latest
+custom-message-sdnjf: time="2024-02-28T16:48:49.290Z" level=info msg="capturing logs" argo=true
+custom-message-sdnjf: "Provided from the CLI"
+custom-message-sdnjf: time="2024-02-28T16:48:50.291Z" level=info msg="sub-process exited" argo=true error="<nil>"
+```
+
+Copy the existing workflow YAML manifest to a new file. We are going to use `vim` here.
+
+```
+$ cp hello-world.yaml custom-message.yaml
+$ vim custom-message.yaml
+```
+
 Change the workflow definition so that it can accept a parameter named `message`. Use the parameter to render the passed in value in the `echo` command. Store the definition in a new workflow file name `custom-message.yaml` and change the name to `custom-message-`.
 
 ```yaml
