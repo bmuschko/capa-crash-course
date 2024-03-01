@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: doc-conversion-
+spec:
+  entrypoint: main
+  artifactRepositoryRef:
+    configMap: aws-artifact-repositories
+    key: docs-repository
+
+  arguments:
+    parameters:
+      - name: directory
+      - name: sourceFile
+      - name: targetFile
+
+  templates:
+  - name: main
+    inputs:
+      parameters:
+        - name: directory
+        - name: sourceFile
+        - name: targetFile
+      artifacts:
+        - name: storage
+          path: /mnt
+          s3:
+            key: "{{ inputs.parameters.directory }}"
+    outputs:
+      artifacts:
+        - name: storage
+          path: /mnt/output
+          s3:
+            key: "{{ inputs.parameters.directory }}/output/{{ inputs.parameters.targetFile }}"
+
+    script:
+      image: pandoc/latex:3.1.1.0
+      workingDir: /mnt
+      command: ["/bin/sh"]
+      source: |
+        mkdir -p output
+        pandoc {{ inputs.parameters.sourceFile }} -o output/{{ inputs.parameters.targetFile }}

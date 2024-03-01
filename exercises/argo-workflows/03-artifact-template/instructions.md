@@ -1,0 +1,9 @@
+# Exercise 3
+
+You want to convert a Markdown file to a PDF file in an automated fashion as part of a Argo workflow. [Pandoc](https://pandoc.org/) is a universal document converter that supports the operation and can be executed as a [container image](https://hub.docker.com/r/pandoc/latex). The original Markdown files and the generated PDF files will be stored in a AWS S3 bucket.
+
+1. Log into your AWS console. Generate an access key under _Account > Security credentials > Create access key_; write down the access key and secret access key. Create a new S3 bucket, add the folder `convert`, and upload the Markdown files available in the [docs](./docs) folder.
+2. Create a new Secret object named `aws-cred` in the `argo` namespace. Provide the AWS access key and secret access key using the keys `accesskey` and `secretkey`.
+3. Create a new ConfigMap object named `aws-artifact-repositories` in the `argo` namespace to define the S3 artifact repository. The key for the artifact definition should use `docs-repository`. Point to the S3 endpoint and bucket, as well as the credentials from the Secret defined in the previous step.
+4. Create a new file named `doc-conversion.yaml`. Within the file, define a workflow with the name prefix `doc-conversion-` using a container template definition. The template runs the container image `pandoc/latex:3.1.1.0` and runs the command `pandoc <markdown-file> -o output/<pdf-file>` using a script template. Ensure that the workflow will be executed in the `argo` namespace. Define a directory, source file, and target file as parameters and consume them. Source and target files should be referenced from the S3 artifact repository.
+5. Execute the workflow in `doc-conversion.yaml` in the `argo` namespace. Provide the input directory `convert`, source file `shopping-list.md` and the target file `shopping-list.pdf`.

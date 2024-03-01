@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-artifact-repositories
+  namespace: argo
+  annotations:
+    workflows.argoproj.io/default-artifact-repository: docs-repository
+data:
+  docs-repository: |
+    archiveLogs: false
+    s3:
+      endpoint: s3.amazonaws.com
+      bucket: bmuschko-markdown-source-docs
+      region: us-west-2
+      accessKeySecret:
+        name: aws-cred
+        key: accesskey
+      secretKeySecret:
+        name: aws-cred
+        key: secretkey
