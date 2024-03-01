@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: nginx-deployment-
+spec:
+  arguments:
+    parameters:
+      - name: replicas
+        value: 3
+      - name: tag
+        value: 1.25.4-alpine
+  entrypoint: main
+  serviceAccountName: app-sa
+  templates:
+  - name: main
+    inputs:
+      parameters:
+        - name: replicas
+        - name: tag
+    resource:
+      action: create
+      manifest: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          generateName: nginx-deployment-
+          namespace: app
+          labels:
+            app: nginx
+        spec:
+          replicas: {{ inputs.parameters.replicas }}
+          selector:
+            matchLabels:
+              app: nginx
+          template:
+            metadata:
+              labels:
+                app: nginx
+            spec:
+              containers:
+              - image: nginx:{{ inputs.parameters.tag }}
+                name: nginx
+                ports:
+                - containerPort: 80
