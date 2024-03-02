@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: go-build-
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/bmuschko/calc
+      - name: branch
+        value: master
+      - name: cloneDepth
+        value: 1
+
+  entrypoint: checkout
+
+  volumeClaimTemplates:
+    - metadata:
+        name: work
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 64Mi
+
+  templates:
+  - name: checkout
+    dag:
+      tasks:
+        - name: checkout
+          template: git-clone
+          arguments:
+            parameters:
+              - name: repo
+                value: "{{workflow.parameters.repo}}"
+              - name: branch
+                value: "{{workflow.parameters.branch}}"
+              - name: cloneDepth
+                value: "{{workflow.parameters.cloneDepth}}"
+        - name: build
+          template: go-build
+          dependencies: [checkout]
+
+  - name: git-clone
+    inputs:
+      parameters:
+        - name: repo
+        - name: branch
+        - name: cloneDepth
+    container:
+      volumeMounts:
+        - mountPath: /work
+          name: work
+      image: alpine/git:v2.43.0
+      workingDir: /work
+      args:
+        - clone
+        - --depth
+        - "{{inputs.parameters.cloneDepth}}"
+        - --branch
+        - "{{inputs.parameters.branch}}"
+        - --single-branch
+        - "{{inputs.parameters.repo}}"
+        - .
+
+  - name: go-build
+    container:
+      volumeMounts:
+        - mountPath: /work
+          name: work
+      image: golang:1.22.0-alpine3.18
+      workingDir: /work
+      args:
+        - go
+        - build

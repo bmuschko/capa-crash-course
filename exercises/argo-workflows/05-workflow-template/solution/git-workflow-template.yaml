@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: git-workflow-template
+  namespace: argo
+spec:
+  arguments:
+    parameters:
+      - name: repo
+      - name: branch
+        value: main
+      - name: cloneDepth
+        value: 1
+
+  templates:
+  - name: checkout
+    dag:
+      tasks:
+        - name: checkout
+          template: git-clone
+          arguments:
+            parameters:
+              - name: repo
+                value: "{{workflow.parameters.repo}}"
+              - name: branch
+                value: "{{workflow.parameters.branch}}"
+              - name: cloneDepth
+                value: "{{workflow.parameters.cloneDepth}}"
+
+  - name: git-clone
+    inputs:
+      parameters:
+        - name: repo
+        - name: branch
+        - name: cloneDepth
+    container:
+      volumeMounts:
+        - mountPath: /work
+          name: work
+      image: alpine/git:v2.43.0
+      workingDir: /work
+      args:
+        - clone
+        - --depth
+        - "{{inputs.parameters.cloneDepth}}"
+        - --branch
+        - "{{inputs.parameters.branch}}"
+        - --single-branch
+        - "{{inputs.parameters.repo}}"
+        - .
