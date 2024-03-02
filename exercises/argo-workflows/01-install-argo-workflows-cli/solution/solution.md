@@ -2,6 +2,9 @@
 
 ## Installing Argo Workflows
 
+> [!NOTE]
+> You can execute all commands mentioned below with the shell script [install-argo-workflows.sh](./install-argo-workflows.sh).
+
 Create the `argo` namespace.
 
 ```

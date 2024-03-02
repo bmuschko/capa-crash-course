@@ -52,6 +52,7 @@ metadata:
   generateName: doc-conversion-
 spec:
   entrypoint: main
+
   artifactRepositoryRef:
     configMap: aws-artifact-repositories
     key: docs-repository

@@ -52,8 +52,10 @@ spec:
         value: 3
       - name: tag
         value: 1.25.4-alpine
+
   entrypoint: main
   serviceAccountName: app-sa
+
   templates:
   - name: main
     inputs:

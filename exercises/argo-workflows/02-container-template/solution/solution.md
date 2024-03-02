@@ -16,6 +16,7 @@ metadata:
   generateName: hello-world-
 spec:
   entrypoint: hello-world
+
   templates:
   - name: hello-world
     container:
@@ -86,7 +87,9 @@ spec:
     parameters:
       - name: message
         value: Hello World!
+
   entrypoint: hello-world
+
   templates:
   - name: hello-world
     inputs:
