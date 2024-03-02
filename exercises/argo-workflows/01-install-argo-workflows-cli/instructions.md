@@ -1,6 +1,6 @@
 # Exercise 1
 
-In this exercise, you will install Argo Workflows and Argo CLI on your machine. You can find installation instruction for Argo Workflow [here](https://argo-workflows.readthedocs.io/en/latest/quick-start/#install-argo-workflows), and for the Argo CLI [here](https://argo-workflows.readthedocs.io/en/latest/quick-start/#install-the-argo-workflows-cli).
+In this exercise, you will install Argo Workflows and Argo CLI on your machine. You can find installation instruction for Argo Workflows [here](https://argo-workflows.readthedocs.io/en/latest/quick-start/#install-argo-workflows), and for the Argo CLI [here](https://argo-workflows.readthedocs.io/en/latest/quick-start/#install-the-argo-workflows-cli).
 
 1. Create the `argo` namespace on your Kubernetes cluster.
 2. Install the latest version Argo Workflows release into the `argo` namespace. Check on the Deployments named `argo-server` and `workflow-controller` in the `argo` namespace. Ensure that the replicas controlled by the Deployments transition into the "Running" status.
