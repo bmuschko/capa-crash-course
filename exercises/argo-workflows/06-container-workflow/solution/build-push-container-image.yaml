@@ -1,0 +1,141 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: app-frontend-build-push-container-image-
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/bmuschko/app-frontend
+      - name: branch
+        value: main
+      - name: revision
+        value: HEAD
+      - name: path
+        value: .
+      - name: platforms
+        value: linux/amd64,linux/arm64
+      - name: image
+        value: bmuschko/app-frontend
+  entrypoint: checkout
+  volumeClaimTemplates:
+    - metadata:
+        name: work
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 64Mi
+  templates:
+  - name: build-and-push
+    dag:
+      tasks:
+        - name: checkout
+          template: git-clone
+          arguments:
+            parameters:
+              - name: repo
+                value: "{{workflow.parameters.repo}}"
+              - name: branch
+                value: "{{workflow.parameters.branch}}"
+
+        - name: get-short-hash
+          template: short-hash
+          arguments:
+            parameters:
+              - name: revision
+                value: "{{ workflow.parameters.revision }}"
+          dependencies: [checkout]
+
+        - name: container-image
+          template: build-push-container-image
+          arguments:
+            parameters:
+              - name: path
+                value: "{{workflow.parameters.path}}"
+              - name: platforms
+                value: "{{workflow.parameters.platforms}}"
+              - name: image
+                value: "{{workflow.parameters.image}}"
+              - name: hash
+                value: "{{ tasks.get-short-hash.outputs.result }}"
+          dependencies: [get-short-hash]
+
+  - name: git-clone
+    inputs:
+      parameters:
+        - name: repo
+        - name: branch
+    container:
+      volumeMounts:
+        - mountPath: /work
+          name: work
+      image: alpine/git:v2.43.0
+      workingDir: /work
+      args:
+        - clone
+        - --depth
+        - "1"
+        - --branch
+        - "{{inputs.parameters.branch}}"
+        - --single-branch
+        - "{{inputs.parameters.repo}}"
+        - .
+
+  - name: short-hash
+    inputs:
+      parameters:
+      - name: revision
+    container:
+      volumeMounts:
+        - mountPath: /work
+          name: work
+      image: alpine/git:v2.43.0
+      workingDir: /work
+      command:
+      - git
+      - rev-parse
+      - --short
+      - "{{ inputs.parameters.revision }}"
+
+  - name: build-push-container-image
+    inputs:
+      parameters:
+        - name: path
+        - name: platforms
+        - name: image
+        - name: hash
+    volumes:
+      - name: docker-config
+        secret:
+          secretName: docker-config
+    container:
+      readinessProbe:
+        exec:
+          command: [sh, -c, "buildctl debug workers"]
+      image: moby/buildkit:v0.12.5-rootless
+      volumeMounts:
+        - name: work
+          mountPath: /work
+        - name: docker-config
+          mountPath: /.docker
+      workingDir: /work/{{inputs.parameters.path}}
+      env:
+        - name: BUILDKITD_FLAGS
+          value: --oci-worker-no-process-sandbox
+        - name: DOCKER_CONFIG
+          value: /.docker
+      command:
+        - buildctl-daemonless.sh
+      args:
+        - build
+        - --frontend
+        - dockerfile.v0
+        - --local
+        - context=.
+        - --local
+        - dockerfile=.
+        - --opt
+        - platform={{inputs.parameters.platforms}}
+        - --output
+        - type=image,name=docker.io/{{inputs.parameters.image}}:{{inputs.parameters.hash}},push=true
