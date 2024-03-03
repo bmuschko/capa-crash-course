@@ -1,0 +1,12 @@
+# Exercise 6
+
+A development team works on building and delivering a Node.js project available in a GitHub repository [bmuschko/app-frontend](https://github.com/bmuschko/app-frontend). You have been tasked with creating a workflow for checking out the code, building a container image using [buildkit](https://docs.docker.com/build/buildkit/), and pushing it to [Docker Hub](https://hub.docker.com/).
+
+> [!NOTE]
+> You'll need an account on Docker Hub to push a container image. Sign up [here](https://hub.docker.com/signup) and create an [authentication token](https://docs.docker.com/security/for-developers/access-tokens/).
+
+1. You'll need to have the new Secret named `docker-config` available in the `argo` namespace so you'll be able authenticate with Docker Hub. You'll need to set two environment variables: `DOCKER_USERNAME` and `DOCKER_TOKEN`. Run the following command to create the Secret: `kubectl create secret generic docker-config -n argo --from-literal="config.json={\"auths\": {\"https://index.docker.io/v1/\": {\"auth\": \"$(echo -n $DOCKER_USERNAME:$DOCKER_TOKEN|base64)\"}}}"`.
+2. Inspect the existing manifest in [`build-push-container-image.yaml`](./build-push-container-image.yaml). You'll find a workflow that defines a template for checking out the code named `checkout`, and another one for building/pushing the container named `build-push-container-image`. You'll primarily focus on filling the in the logic for the container operation.
+3. Mount the Secret named `docker-config` as a Volume within the template definition `build-push-container-image`. Mount the Volume to the path `/.docker`.
+4. Define a parameter that can specify the runtime [platforms](https://github.com/moby/buildkit/blob/master/docs/multi-platform.md) supported by the container image. Use the values `linux/amd64,linux/arm64` as default and assign the values to the command line parameters of the `buildctl-daemonless.sh` command.
+5. The container image should use the `latest` tag as default but can be configured through an input parameter. How would you support using the Git commit hash of the latest commit as tag?
