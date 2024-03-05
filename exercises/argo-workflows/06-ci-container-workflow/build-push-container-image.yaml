@@ -13,7 +13,9 @@ spec:
         value: .
       - name: image
         value: bmuschko/app-frontend
+
   entrypoint: checkout
+
   volumeClaimTemplates:
     - metadata:
         name: work
@@ -22,6 +24,7 @@ spec:
         resources:
           requests:
             storage: 64Mi
+
   templates:
   - name: checkout
     dag:

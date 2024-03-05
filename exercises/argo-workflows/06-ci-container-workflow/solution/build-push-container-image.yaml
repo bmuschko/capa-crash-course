@@ -17,7 +17,9 @@ spec:
         value: linux/amd64,linux/arm64
       - name: image
         value: bmuschko/app-frontend
+
   entrypoint: checkout
+
   volumeClaimTemplates:
     - metadata:
         name: work
@@ -26,6 +28,7 @@ spec:
         resources:
           requests:
             storage: 64Mi
+
   templates:
   - name: build-and-push
     dag:
