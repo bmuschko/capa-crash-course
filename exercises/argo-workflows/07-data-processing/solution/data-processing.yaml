@@ -1,40 +1,40 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: parallelism-nested-
+  generateName: parallel-data-processing-
 spec:
   arguments:
     parameters:
-    - name: parallel-list
-      value: |
-        [
-            {"date": "2024-03-01", "size": 100},
-            {"date": "2024-05-20", "size": 531},
-            {"date": "2024-07-04", "size": 999},
-            {"date": "2024-10-22", "size": 13}
-        ]
+      - name: json-data
+        value: |
+          [
+             {"date": "2024-03-01", "size": 100},
+             {"date": "2024-05-20", "size": 531},
+             {"date": "2024-07-04", "size": 999},
+             {"date": "2024-10-22", "size": 13}
+          ]
 
-  entrypoint: parallel-worker
+  entrypoint: worker
 
   templates:
-  - name: parallel-worker
+  - name: worker
     parallelism: 2
     inputs:
       parameters:
-      - name: parallel-list
+        - name: json-data
     steps:
-    - - name: parallel-worker
-        template: one-job
+    - - name: processing
+        template: json-parsing
         arguments:
           parameters:
-          - name: parallel-id
-            value: "{{item}}"
-        withParam: "{{inputs.parameters.parallel-list}}"
+            - name: data-item
+              value: "{{item}}"
+        withParam: "{{inputs.parameters.json-data}}"
 
-  - name: one-job
+  - name: json-parsing
     inputs:
       parameters:
-      - name: parallel-id
+        - name: data-item
     container:
       image: bmuschko/bash-jq:1.0.0
-      args: ["-c", "echo '{{inputs.parameters.parallel-id}}' | jq '.size'"]
+      args: ["-c", "echo '{{inputs.parameters.data-item}}' | jq '.size'"]
