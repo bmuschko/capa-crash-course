@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: parallelism-nested-
+spec:
+  arguments:
+    parameters:
+    - name: parallel-list
+      value: |
+        [
+            {"date": "2024-03-01", "size": 100},
+            {"date": "2024-05-20", "size": 531},
+            {"date": "2024-07-04", "size": 999},
+            {"date": "2024-10-22", "size": 13}
+        ]
+
+  entrypoint: parallel-worker
+
+  templates:
+  - name: parallel-worker
+    parallelism: 2
+    inputs:
+      parameters:
+      - name: parallel-list
+    steps:
+    - - name: parallel-worker
+        template: one-job
+        arguments:
+          parameters:
+          - name: parallel-id
+            value: "{{item}}"
+        withParam: "{{inputs.parameters.parallel-list}}"
+
+  - name: one-job
+    inputs:
+      parameters:
+      - name: parallel-id
+    container:
+      image: bmuschko/bash-jq:1.0.0
+      args: ["-c", "echo '{{inputs.parameters.parallel-id}}' | jq '.size'"]
