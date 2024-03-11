@@ -1,9 +1,7 @@
 # Solution
 
-## Installing Argo Workflows
-
 > [!NOTE]
-> You can execute all commands mentioned below with the shell script [install-argo-workflows.sh](./install-argo-workflows.sh).
+> You can execute all commands mentioned below with the shell script [install-argo-workflows-cluster-scoped.sh](./install-argo-workflows-cluster-scoped.sh) or [install-argo-workflows-namespaced.sh](./install-argo-workflows-namespaced.sh).
 
 Create the `argo` namespace.
 
@@ -14,7 +12,7 @@ $ kubectl create namespace argo
 Install Argo Workflows.
 
 ```
-$ kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/download/v3.5.4/quick-start-minimal.yaml
+$ kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/download/v3.5.5/quick-start-minimal.yaml
 ```
 
 Wait for the Argo server Pod to become ready.
