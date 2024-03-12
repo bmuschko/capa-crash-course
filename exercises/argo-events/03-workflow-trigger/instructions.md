@@ -1,4 +1,4 @@
-# Exercise 2
+# Exercise 3
 
 You have been asked to set up an endpoint for triggering an Argo workflow. Define the necessary Argo events components and observe the workflow execution after sending a request to the endpoint.
 

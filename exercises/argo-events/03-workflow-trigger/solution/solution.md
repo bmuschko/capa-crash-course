@@ -76,7 +76,7 @@ The RBAC permissions for the sensor. You can find an example in [`sensor-rbac.ya
 Perform a HTTP request using the POST method to the event source endpoint. Ensure to the provide the `message` parameter with the request body. The following command uses `curl`. The response should indicate `success`.
 
 ```
-$ curl -X POST -d '{"message":"This is a message"}' -H "Content-Type: application/json" -X POST http://localhost:12000/whalesay
+$ curl -X POST -d '{"message":"This is a message"}' -H "Content-Type: application/json" http://localhost:12000/whalesay
 success
 ```
 
@@ -91,7 +91,7 @@ webhook-zxln9   Succeeded   33s   10s        0
 The EventSource object automatically exposes a health endpoint. You can target it using the following command.
 
 ```
-$ curl -X POST -H "Content-Type: application/json" -X POST http://localhost:12000/health
+$ curl -X POST -H "Content-Type: application/json" http://localhost:12000/health
 OK
 ```
 
