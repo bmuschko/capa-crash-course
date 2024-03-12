@@ -94,3 +94,5 @@ The EventSource object automatically exposes a health endpoint. You can target i
 $ curl -X POST -H "Content-Type: application/json" -X POST http://localhost:12000/health
 OK
 ```
+
+A HTTP request to the health endpoint returns the response message `OK` with response code 200.
