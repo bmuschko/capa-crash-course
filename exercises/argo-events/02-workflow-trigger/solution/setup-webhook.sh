@@ -1,4 +1,4 @@
-kubectl apply -f webhook.yaml -n argo-events
+kubectl apply -f webhook-event-source.yaml -n argo-events
 kubectl apply -f sensor-rbac.yaml -n argo-events
 kubectl apply -f workflow-rbac.yaml -n argo-events
 kubectl apply -f special-workflow-trigger-shortened.yaml -n argo-events
