@@ -10,3 +10,5 @@ You have been asked to set up an endpoint for triggering an Argo workflow. Defin
 3. Create a sensor that accepts the events from the webhook endpoint as dependency. Parse a single parameter from the request body and map it to the name `message`. The workflow to be submitted should be defined directly inside of the sensor. Submit the workflow in a container template that uses `docker/whalesay:latest`. Print the `message` parameter to standard output.
 4. Create a service account named `operate-workflow-sa` and wire it with a RoleBinding that binds to a Role allowing all operations for the resources `workflows`, `workflowtemplates`, `cronworkflows`, and `clusterworkflowtemplates`.
 5. Expose the event source Pod via port forwarding to consume HTTP requests on port `12000`.
+6. Perform a HTTP call to the endpoint to trigger the execution of the workflow.
+7. Perform a HTTP call to the health endpoint.

@@ -87,3 +87,10 @@ $ argo list -n argo-events
 NAME            STATUS      AGE   DURATION   PRIORITY   MESSAGE
 webhook-zxln9   Succeeded   33s   10s        0
 ```
+
+The EventSource object automatically exposes a health endpoint. You can target it using the following command.
+
+```
+$ curl -X POST -H "Content-Type: application/json" -X POST http://localhost:12000/health
+OK
+```
