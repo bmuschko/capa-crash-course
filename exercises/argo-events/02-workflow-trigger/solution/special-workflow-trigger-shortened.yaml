@@ -6,9 +6,9 @@ spec:
   template:
     serviceAccountName: operate-workflow-sa
   dependencies:
-    - name: test-dep
+    - name: webhook-dep
       eventSourceName: webhook
-      eventName: example
+      eventName: whalesay
   triggers:
     - template:
         name: argo-workflow-trigger
@@ -37,6 +37,6 @@ spec:
                       args: ["{{inputs.parameters.message}}"]
           parameters:
             - src:
-                dependencyName: test-dep
+                dependencyName: webhook-dep
                 dataKey: body
               dest: spec.arguments.parameters.0.value
