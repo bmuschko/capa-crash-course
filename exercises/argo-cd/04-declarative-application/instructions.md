@@ -1,5 +1,7 @@
 # Exercise 4
 
+Applications can be represented as YAML manifests. In this exercise, you'll create an Application declaratively. Later, you'll also create an overarching Application for multiple other Applications.
+
 1. Create a Application YAML manifest that manages the application with the following configuration details:
 
     - Application name: nginx
