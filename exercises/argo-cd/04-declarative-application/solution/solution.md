@@ -1,0 +1,18 @@
+# Solution
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bmuschko/capa-crash-course
+    targetRevision: HEAD
+    path: ./exercises/argo-cd/04-declarative-application/nginx
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+```
