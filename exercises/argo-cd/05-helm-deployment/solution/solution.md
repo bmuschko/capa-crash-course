@@ -1,6 +1,6 @@
 # Solution
 
-Create a new application from the Argo CD UI by clicking the button _New App_. Enter the configuration data given in the instructions. In the Helm section, change the value of the parameter `replicaCount` to 6. 
+Create a new application from the Argo CD UI by clicking the button _New App_. Enter the configuration data given in the instructions. In the Helm section, change the value of the parameter `replicaCount` to 6. Click the _Create_ button.
 
 ![helm-values-ui](./imgs/helm-values-ui.png)
 
