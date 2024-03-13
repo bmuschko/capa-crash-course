@@ -60,3 +60,15 @@ $ git rm exercises/argo-cd/03-sync-options/nginx/nginx-service.yaml
 $ git commit . -m "Remove Service YAML manifest"
 $ git push origin main
 ```
+
+After refreshing the application, it will render the "OutOfSync" status, however, the Service object still exists. By default, Argo CD does not automatically delete objects for represented by removed YAML manifests.
+
+![non-pruned-service-ui](./imgs/non-pruned-service-ui.png)
+
+Enable the "Prune Resources" option in the "Sync Policy" section.
+
+![enable-prune-resources-ui](./imgs/enable-prune-resources-ui.png)
+
+The Service object will now be removed automatically.
+
+![pruned-service-ui](./imgs/pruned-service-ui.png)
