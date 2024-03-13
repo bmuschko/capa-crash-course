@@ -1,0 +1,10 @@
+replicaCount: 3
+
+image:
+  repository: nginx
+  tag: 1.25.3-alpine
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
