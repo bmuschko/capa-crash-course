@@ -9,4 +9,6 @@
     - Cluster: https://kubernetes.default.svc
     - Namespace: `default`
 
-2. Apply the YAML manifest to create the application declaratively.
+2. Create the application declaratively in the `argocd` namespace using the the YAML manifest with the Argo CD CLI.
+3. Inspect the application in the Argo CD UI. Sync the application.
+4. Delete the application declaratively in the `argocd` namespace using the Argo CD CLI.
