@@ -13,7 +13,7 @@ spec:
         app: nginx
     spec:
       containers:
-      - image: nginx:1.25.3-alpine
+      - image: nginx:1.25.4-alpine
         name: nginx
         ports:
         - containerPort: 80
