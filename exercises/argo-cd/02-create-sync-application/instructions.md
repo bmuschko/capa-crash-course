@@ -8,7 +8,7 @@ Your team wants to deploy nginx with the help of Argo CD. You can find the YAML 
     - Application name: nginx
     - Project: default
     - Repository URL: https://github.com/bmuschko/capa-crash-course
-    - Path: `./argo-cd/02-sync-application/app`
+    - Path: `./exercises/argo-cd/02-create-sync-application/nginx`
     - Cluster: https://kubernetes.default.svc
     - Namespace: `default`
 
