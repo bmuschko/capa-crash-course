@@ -2,7 +2,7 @@
 
 In this exercise, you will learn about the auto-sync, self-heal, and auto-prune options.
 
-1. Inspect the YAML manifests to understand their purpose.
+1. Inspect the YAML manifests in the [`nginx`](./nginx) directory to understand their purpose.
 2. Create a new application using the Argo CD UI that uses the automatic sync policy. Use the following configuration details:
 
     - Application name: nginx

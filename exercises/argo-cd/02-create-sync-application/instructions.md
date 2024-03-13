@@ -2,7 +2,7 @@
 
 Your team wants to deploy nginx with the help of Argo CD. You can find the YAML manifests required for nginx in the [`nginx`](./nginx) folder. Refer to the application manifests in Argo CD via https://github.com/bmuschko/capa-crash-course/tree/main/argo-cd/02-sync-application/nginx.
 
-1. Inspect the YAML manifests to understand their purpose.
+1. Inspect the YAML manifests in the [`nginx`](./nginx) directory to understand their purpose.
 2. Create a new application using the Argo CD UI. Use the following configuration details:
 
     - Application name: nginx
