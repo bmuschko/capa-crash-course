@@ -12,5 +12,5 @@
 2. Create the application declaratively in the `argocd` namespace using the the YAML manifest with the Argo CD CLI.
 3. Inspect the application in the Argo CD UI. Sync the application.
 4. Delete the application declaratively in the `argocd` namespace using the Argo CD CLI.
-5. Implement the App of Apps pattern by creating two Application YAML manifests that point to the nginx application. Create the application from both application. Each application should runs its objects in a dedicated namespace.
+5. Implement the [App of Apps pattern](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) by creating two Application YAML manifests that point to the nginx application. Create the application from both application. Each application should runs its objects in a dedicated namespace.
 6. Observe the created applications in the Argo CD UI.
