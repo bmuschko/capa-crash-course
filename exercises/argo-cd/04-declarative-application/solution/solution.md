@@ -36,3 +36,9 @@ Delete the application. The application's objects will be deleted and the applic
 $ kubectl delete -f nginx-application.yaml
 application.argoproj.io "nginx" deleted
 ```
+
+Create two Application YAML manifests that live in the same directory. Make sure to provide unique names. Then create a new application using the UI or CLI. The following commands uses the CLI and points to a folder that already contains the Application YAML manifests.
+
+```
+$ argocd app create apps --dest-namespace argocd --dest-server https://kubernetes.default.svc --repo https://github.com/bmuschko/capa-crash-course.git --path ./exercises/argo-cd/04-declarative-application/solution/app-of-apps
+```
