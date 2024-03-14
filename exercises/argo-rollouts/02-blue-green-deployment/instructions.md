@@ -1,8 +1,8 @@
 # Exercise 2
 
-In this exercise, you'll learn how to implement the blue-green deployment with the help of Argo Rollouts.
+In this exercise, you'll learn how to implement the blue-green deployment with the help of Argo Rollouts. You'll start by deploying an application stack that runs the container image `nginx:1.25.3-alpine` (blue deployment). Later, you'll upgrade to the container image `nginx:1.25.4-alpine` (green deployment).
 
-1. Inspect the existing setup in the [nginx](./blue-green) directory. The files set up a Rollout definition, and two Service definitions, one for blue and one for green.
+1. Inspect the existing setup in the [blue-green](./blue-green) directory. The files set up a Rollout definition, and two Service definitions, one for routing traffic to the blue and one for the green deployment.
 2. Create a new application using the Argo CD UI. Use the following configuration details:
 
     - Application name: nginx
@@ -14,3 +14,4 @@ In this exercise, you'll learn how to implement the blue-green deployment with t
     - Namespace: `default`
 
 3. Using the `argo rollouts` command, list all rollouts, get the status of the `nginx-rollout` rollout, and render its details.
+4. Set the container image `nginx:1.25.4-alpine` for the rollout and promote it. Check the details of the rollout.
