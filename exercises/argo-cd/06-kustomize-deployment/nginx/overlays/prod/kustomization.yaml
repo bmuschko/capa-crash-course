@@ -1,0 +1,6 @@
+namePrefix: prod-
+bases:
+- ../../base
+patchesStrategicMerge:
+- deployment.yaml
+- service.yaml
