@@ -44,25 +44,76 @@ NAME                                       KIND        STATUS     AGE  INFO
       └──□ nginx-rollout-69b65b7588-sbqgv  Pod         ✔ Running  10m  ready:1/1
 ```
 
-To change the image, run the imperative command to switch to the newer container image.
+You can make a call to the blue Service. Ngix will return the initial version of the container image, 1.25.3.
+
+```
+$ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-blue-service.default.svc.cluster.local:80 | grep Server
+Server: nginx/1.25.3
+```
+
+Run the following imperative command to signal to the Rollout that you want to create a new ReplicaSet that controls replicas with the container image `nginx:1.25.4-alpine`.
 
 ```
 $ kubectl argo rollouts set image nginx-rollout nginx=nginx:1.25.4-alpine
 rollout "nginx-rollout" image updated
 ```
 
-Then, promote the rollout.
+Argo Rollouts created a new ReplicaSet that manages the new revision of the application. The application was set to "Suspended".
+
+![blue-green-rolled-out-suspended-ui](./imgs/blue-green-rolled-out-suspended-ui.png)
+
+Both application versions run in parallel and can be reached independently through their Services.
+
+```
+$ kubectl argo rollouts get rollout nginx-rollout
+Name:            nginx-rollout
+Namespace:       default
+Status:          ॥ Paused
+Message:         BlueGreenPause
+Strategy:        BlueGreen
+Images:          nginx:1.25.3-alpine (stable, active)
+                 nginx:1.25.4-alpine (preview)
+Replicas:
+  Desired:       3
+  Current:       6
+  Updated:       3
+  Ready:         3
+  Available:     3
+
+NAME                                       KIND        STATUS     AGE  INFO
+⟳ nginx-rollout                            Rollout     ॥ Paused   12m
+├──# revision:2
+│  └──⧉ nginx-rollout-5cff9d855            ReplicaSet  ✔ Healthy  11m  preview
+│     ├──□ nginx-rollout-5cff9d855-6zhdr   Pod         ✔ Running  11m  ready:1/1
+│     ├──□ nginx-rollout-5cff9d855-gt96l   Pod         ✔ Running  11m  ready:1/1
+│     └──□ nginx-rollout-5cff9d855-qpjvj   Pod         ✔ Running  11m  ready:1/1
+└──# revision:1
+   └──⧉ nginx-rollout-69b65b7588           ReplicaSet  ✔ Healthy  12m  stable,active
+      ├──□ nginx-rollout-69b65b7588-dpvvh  Pod         ✔ Running  12m  ready:1/1
+      ├──□ nginx-rollout-69b65b7588-f7dw8  Pod         ✔ Running  12m  ready:1/1
+      └──□ nginx-rollout-69b65b7588-xkjgl  Pod         ✔ Running  12m  ready:1/1
+```
+
+You can reach both application versions by making HTTP calls to the corresponding Services.
+
+```
+$ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-blue-service.default.svc.cluster.local:80 | grep Server
+Server: nginx/1.25.3
+$ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-green-service.default.svc.cluster.local:81 | grep Server
+Server: nginx/1.25.4
+```
+
+Promoting the rollout will shut down revision 1 and make revision 2 active.
 
 ```
 $ kubectl argo rollouts promote nginx-rollout
 rollout 'nginx-rollout' promoted
 ```
 
-You will will see that the initial revision will be ramped down while the second revision becomes active.
+You will will see that the initial revision will be scaled down while the second revision becomes active.
 
 ```
 $ kubectl argo rollouts get rollout nginx-rollout
-
 Name:            nginx-rollout
 Namespace:       default
 Status:          ✔ Healthy
@@ -75,13 +126,13 @@ Replicas:
   Ready:         3
   Available:     3
 
-NAME                                      KIND        STATUS        AGE  INFO
-⟳ nginx-rollout                           Rollout     ✔ Healthy     14m
+NAME                                      KIND        STATUS        AGE    INFO
+⟳ nginx-rollout                           Rollout     ✔ Healthy     5m13s
 ├──# revision:2
-│  └──⧉ nginx-rollout-5cff9d855           ReplicaSet  ✔ Healthy     92s  stable,active
-│     ├──□ nginx-rollout-5cff9d855-ngs4m  Pod         ✔ Running     92s  ready:1/1
-│     ├──□ nginx-rollout-5cff9d855-q7kxx  Pod         ✔ Running     92s  ready:1/1
-│     └──□ nginx-rollout-5cff9d855-w65bl  Pod         ✔ Running     92s  ready:1/1
+│  └──⧉ nginx-rollout-5cff9d855           ReplicaSet  ✔ Healthy     4m30s  stable,active
+│     ├──□ nginx-rollout-5cff9d855-l4cfp  Pod         ✔ Running     4m29s  ready:1/1
+│     ├──□ nginx-rollout-5cff9d855-lrn4r  Pod         ✔ Running     4m29s  ready:1/1
+│     └──□ nginx-rollout-5cff9d855-qf28z  Pod         ✔ Running     4m29s  ready:1/1
 └──# revision:1
-   └──⧉ nginx-rollout-69b65b7588          ReplicaSet  • ScaledDown  14m
+   └──⧉ nginx-rollout-69b65b7588          ReplicaSet  • ScaledDown  5m13s
 ```
