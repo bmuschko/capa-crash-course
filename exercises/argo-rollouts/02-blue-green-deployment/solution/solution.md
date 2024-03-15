@@ -51,7 +51,7 @@ $ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI 
 Server: nginx/1.25.3
 ```
 
-Run the following imperative command to signal to the Rollout that you want to create a new ReplicaSet that controls replicas with the container image `nginx:1.25.4-alpine`.
+Next up, let's roll out the change of the container image. Run the following imperative command to signal to the Rollout that you want to create a new ReplicaSet that controls replicas with the container image `nginx:1.25.4-alpine`.
 
 ```
 $ kubectl argo rollouts set image nginx-rollout nginx=nginx:1.25.4-alpine
@@ -118,7 +118,7 @@ Name:            nginx-rollout
 Namespace:       default
 Status:          ✔ Healthy
 Strategy:        BlueGreen
-Images:          nginx:1.25.4-alpine (stable, active)
+Images:          nginx:1.25.3-alpine (stable, active)
 Replicas:
   Desired:       3
   Current:       3
@@ -126,13 +126,13 @@ Replicas:
   Ready:         3
   Available:     3
 
-NAME                                      KIND        STATUS        AGE    INFO
-⟳ nginx-rollout                           Rollout     ✔ Healthy     5m13s
-├──# revision:2
-│  └──⧉ nginx-rollout-5cff9d855           ReplicaSet  ✔ Healthy     4m30s  stable,active
-│     ├──□ nginx-rollout-5cff9d855-l4cfp  Pod         ✔ Running     4m29s  ready:1/1
-│     ├──□ nginx-rollout-5cff9d855-lrn4r  Pod         ✔ Running     4m29s  ready:1/1
-│     └──□ nginx-rollout-5cff9d855-qf28z  Pod         ✔ Running     4m29s  ready:1/1
-└──# revision:1
-   └──⧉ nginx-rollout-69b65b7588          ReplicaSet  • ScaledDown  5m13s
+NAME                                       KIND        STATUS        AGE   INFO
+⟳ nginx-rollout                            Rollout     ✔ Healthy     2m8s
+├──# revision:3
+│  └──⧉ nginx-rollout-69b65b7588           ReplicaSet  ✔ Healthy     2m8s  stable,active
+│     ├──□ nginx-rollout-69b65b7588-dsfds  Pod         ✔ Running     2m8s  ready:1/1
+│     ├──□ nginx-rollout-69b65b7588-jwj9z  Pod         ✔ Running     2m8s  ready:1/1
+│     └──□ nginx-rollout-69b65b7588-wgnlh  Pod         ✔ Running     2m8s  ready:1/1
+└──# revision:2
+   └──⧉ nginx-rollout-5cff9d855            ReplicaSet  • ScaledDown  56s
 ```
