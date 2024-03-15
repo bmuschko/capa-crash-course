@@ -147,3 +147,9 @@ Server: nginx/1.25.4
 $ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-green-service.default.svc.cluster.local:81 | grep Server
 Server: nginx/1.25.4
 ```
+
+You will see that the application is marked "OutOfSync". That is because the state in Git does not reflect the changes made in the cluster yet.
+
+![blue-green-outofsync-ui](./imgs/blue-green-outofsync-ui.png)
+
+At this point, you would update the Rollout manifest in Git and push it. After syncing the application, it will become "Healthy" again.
