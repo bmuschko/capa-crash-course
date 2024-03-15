@@ -8,6 +8,7 @@ spec:
     blueGreen: 
       activeService: nginx-blue-service
       previewService: nginx-green-service
+      autoPromotionEnabled: false
   selector:
     matchLabels:
       app: nginx
