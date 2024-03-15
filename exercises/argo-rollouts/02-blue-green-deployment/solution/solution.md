@@ -44,10 +44,12 @@ NAME                                       KIND        STATUS     AGE  INFO
       └──□ nginx-rollout-69b65b7588-sbqgv  Pod         ✔ Running  10m  ready:1/1
 ```
 
-You can make a call to the blue Service. Ngix will return the initial version of the container image, 1.25.3.
+You can make a call to the blue and green Service. Both Services will route traffic to the initial revision of the application thar run the container image, 1.25.3.
 
 ```
 $ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-blue-service.default.svc.cluster.local:80 | grep Server
+Server: nginx/1.25.3
+$ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-green-service.default.svc.cluster.local:81 | grep Server
 Server: nginx/1.25.3
 ```
 
@@ -94,7 +96,7 @@ NAME                                       KIND        STATUS     AGE  INFO
       └──□ nginx-rollout-69b65b7588-xkjgl  Pod         ✔ Running  12m  ready:1/1
 ```
 
-You can reach both application versions by making HTTP calls to the corresponding Services.
+You can reach both application versions by making HTTP calls to the corresponding Services. The blue Service will route traffic to the inital application version, the green Service will route traffic to the new application version.
 
 ```
 $ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-blue-service.default.svc.cluster.local:80 | grep Server
@@ -103,14 +105,14 @@ $ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI 
 Server: nginx/1.25.4
 ```
 
-Promoting the rollout will shut down revision 1 and make revision 2 active.
+Promoting the rollout will make revision 2 active, and shut down revision 1 over time.
 
 ```
 $ kubectl argo rollouts promote nginx-rollout
 rollout 'nginx-rollout' promoted
 ```
 
-You will will see that the initial revision will be scaled down while the second revision becomes active.
+You will see that the initial revision will be scaled down while the second revision becomes active. This process may take a little while. Executing the following command with the `--watch` will show those changes as they occur.
 
 ```
 $ kubectl argo rollouts get rollout nginx-rollout
@@ -135,4 +137,13 @@ NAME                                       KIND        STATUS        AGE   INFO
 │     └──□ nginx-rollout-69b65b7588-wgnlh  Pod         ✔ Running     2m8s  ready:1/1
 └──# revision:2
    └──⧉ nginx-rollout-5cff9d855            ReplicaSet  • ScaledDown  56s
+```
+
+Both Services will exclusively route traffic to the new application version.
+
+```
+$ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-blue-service.default.svc.cluster.local:80 | grep Server
+Server: nginx/1.25.4
+$ kubectl run tmp --image=alpine/curl:3.14 --restart=Never -it --rm -- curl -sI nginx-green-service.default.svc.cluster.local:81 | grep Server
+Server: nginx/1.25.4
 ```

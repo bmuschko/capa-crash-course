@@ -1,7 +1,7 @@
 # Solution
 
 > [!NOTE]
-> You can execute all commands mentioned below with the shell scripts [install-argo-rollouts.sh](./install-argo-rollouts.sh) and [start-argo-rollouts-dashboard.sh](./start-argo-rollouts-dashboard.sh).
+> You can execute all commands mentioned below with the shell scripts [install-argo-rollouts.sh](./install-argo-rollouts.sh) and [start-argo-rollouts-dashboard.sh](./start-argo-rollouts-dashboard.sh). Alternatively, you can also install the Argo Rollouts controller as an application in Argo CD.
 
 Create the namespace.
 
