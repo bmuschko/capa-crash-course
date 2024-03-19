@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: nginx-rollout
+spec:
+  replicas: 5
+  strategy:
+    canary: 
+      stableService: nginx-stable-service
+      canaryService: nginx-canary-service
+      trafficRouting:
+        nginx:
+          stableIngress: nginx-stable-ingress
+      steps:
+      - setWeight: 25
+      - pause: {}
+      - setWeight: 100
+      - pause: {}
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:1.25.3-alpine
+        name: nginx
+        ports:
+        - containerPort: 80
