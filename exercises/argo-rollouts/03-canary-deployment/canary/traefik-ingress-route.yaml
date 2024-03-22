@@ -1,0 +1,11 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx-ingress-route
+spec:
+  routes:
+    - kind: Rule
+      match: Host(`canary-rollout.local`)
+      services:
+        - name: traefik-service
+          port: 80
