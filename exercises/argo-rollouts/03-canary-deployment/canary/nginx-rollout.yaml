@@ -9,8 +9,8 @@ spec:
       stableService: nginx-stable-service
       canaryService: nginx-canary-service
       trafficRouting:
-        nginx:
-          stableIngress: nginx-stable-ingress
+        traefik:
+          weightedTraefikServiceName: traefik-service
       steps:
       - setWeight: 25
       - pause: {}
