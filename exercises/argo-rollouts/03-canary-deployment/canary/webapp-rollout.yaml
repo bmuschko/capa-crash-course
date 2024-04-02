@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: nginx-rollout
+  name: webapp-rollout
 spec:
   replicas: 5
   strategy:
