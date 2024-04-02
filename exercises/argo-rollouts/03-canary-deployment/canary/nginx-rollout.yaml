@@ -9,9 +9,22 @@ spec:
       stableService: nginx-stable-service
       canaryService: nginx-canary-service
       trafficRouting:
-        traefik:
-          weightedTraefikServiceName: traefik-service
+        managedRoutes:
+        - name: set-header
+        apisix:
+          route:
+            name: rollouts-apisix-route
+            rules:
+              - rollouts-apisix
       steps:
+      - setCanaryScale:
+          replicas: 1
+      - setHeaderRoute:
+          match:
+            - headerName: trace
+              headerValue:
+                exact: debug
+          name: set-header
       - setWeight: 25
       - pause: {}
       - setWeight: 100
