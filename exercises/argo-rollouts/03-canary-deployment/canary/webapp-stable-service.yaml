@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-stable-service
+  name: webapp-stable-service
 spec:
   type: ClusterIP
   selector:
-    app: nginx
+    app: web
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 3000

@@ -17,7 +17,7 @@ spec:
         hosts:
           - canary-rollout.local
       backends:
-        - serviceName: nginx-stable-service
+        - serviceName: webapp-stable-service
           servicePort: 80
-        - serviceName: nginx-canary-service
+        - serviceName: webapp-canary-service
           servicePort: 80
