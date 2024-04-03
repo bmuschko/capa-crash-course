@@ -5,7 +5,6 @@ Install APISIX and the ingress controller using the shell script `install-apisix
 ```
 $ ./install-apisix.sh
 "apisix" already exists with the same configuration, skipping
-"bitnami" already exists with the same configuration, skipping
 Hang tight while we grab the latest from your chart repositories...
 ...Successfully got an update from the "apisix" chart repository
 Update Complete. ⎈Happy Helming!⎈
