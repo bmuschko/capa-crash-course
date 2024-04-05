@@ -19,8 +19,6 @@ spec:
       analysis:
         templates:
         - templateName: success-analysis-template
-        - templateName: random-failure-analysis-template
-        startingStep: 1
       steps:
       - setCanaryScale:
           replicas: 1
