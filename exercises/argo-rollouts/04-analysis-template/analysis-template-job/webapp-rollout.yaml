@@ -28,10 +28,14 @@ spec:
               headerValue:
                 exact: debug
           name: set-header
-      - setWeight: 25
-      - pause: {}
-      - setWeight: 100
-      - pause: {}
+      - setWeight: 20
+      - pause: {duration: 1m}
+      - setWeight: 40
+      - pause: {duration: 1m}
+      - setWeight: 60
+      - pause: {duration: 1m}
+      - setWeight: 80
+      - pause: {duration: 1m}
   selector:
     matchLabels:
       app: web
