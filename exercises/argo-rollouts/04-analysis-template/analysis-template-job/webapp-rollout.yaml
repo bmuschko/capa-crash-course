@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: webapp-rollout
+spec:
+  replicas: 5
+  strategy:
+    canary: 
+      stableService: webapp-stable-service
+      canaryService: webapp-canary-service
+      trafficRouting:
+        managedRoutes:
+        - name: set-header
+        apisix:
+          route:
+            name: rollouts-apisix-route
+            rules:
+            - rollouts-apisix
+      analysis:
+        templates:
+        - templateName: success-analysis-template
+        - templateName: random-failure-analysis-template
+        startingStep: 1
+      steps:
+      - setCanaryScale:
+          replicas: 1
+      - setHeaderRoute:
+          match:
+            - headerName: trace
+              headerValue:
+                exact: debug
+          name: set-header
+      - setWeight: 25
+      - pause: {}
+      - setWeight: 100
+      - pause: {}
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - image: bmuschko/canary-app:1.0.0
+        name: webapp
+        ports:
+        - containerPort: 3000

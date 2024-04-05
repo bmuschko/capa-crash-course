@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-analysis-template
+spec:
+  metrics:
+  - name: success
+    interval: 5s
+    failureLimit: 1
+    provider:
+      job:
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: alpine
+                image: alpine:3.19.1
+                command: [sh, -c]
+                args: [exit 0]
+              restartPolicy: Never

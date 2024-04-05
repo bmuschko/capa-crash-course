@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: random-failure-analysis-template
+spec:
+  metrics:
+  - name: random-failure
+    count: 2
+    interval: 5s
+    failureLimit: 1
+    provider:
+      job:
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: alpine
+                image: alpine:3.19.1
+                command: [sh, -c]
+                args: [FLIP=$(($(($RANDOM%10))%2)) && exit $FLIP]
+              restartPolicy: Never
