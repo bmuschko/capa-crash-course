@@ -5,6 +5,7 @@ metadata:
 spec:
   metrics:
   - name: success
+    count: 1
     interval: 5s
     failureLimit: 1
     provider:
