@@ -58,3 +58,46 @@ The analysis run will continue to execute and always return success. Over time, 
 The process will continue until the weight of 100% has been reached. Revision 1 will be ramped down.
 
 ![canary-final-ui](./imgs/canary-final-ui.png)
+
+The analysis run has been executed in the background. You can query for it with the following command. The analysis run will stop executing new Jobs as soon as a weight of 100% has been reached for revision 2.
+
+```
+$ kubectl argo rollouts get rollout webapp-rollout
+Name:            webapp-rollout
+Namespace:       default
+Status:          ✔ Healthy
+Strategy:        Canary
+  Step:          10/10
+  SetWeight:     100
+  ActualWeight:  100
+Images:          bmuschko/canary-app:2.0.0 (stable)
+Replicas:
+  Desired:       5
+  Current:       5
+  Updated:       5
+  Ready:         5
+  Available:     5
+
+NAME                                                        KIND         STATUS        AGE  INFO
+⟳ webapp-rollout                                            Rollout      ✔ Healthy     21m
+├──# revision:2
+│  ├──⧉ webapp-rollout-9964c579d                            ReplicaSet   ✔ Healthy     19m  stable
+│  │  ├──□ webapp-rollout-9964c579d-pc7bt                   Pod          ✔ Running     19m  ready:1/1
+│  │  ├──□ webapp-rollout-9964c579d-c7z9l                   Pod          ✔ Running     13m  ready:1/1
+│  │  ├──□ webapp-rollout-9964c579d-hkszr                   Pod          ✔ Running     13m  ready:1/1
+│  │  ├──□ webapp-rollout-9964c579d-ngqpc                   Pod          ✔ Running     13m  ready:1/1
+│  │  └──□ webapp-rollout-9964c579d-t754p                   Pod          ✔ Running     13m  ready:1/1
+│  └──α webapp-rollout-9964c579d-2                          AnalysisRun  ✔ Successful  19m  ✔ 11
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.2   Job          ✔ Successful  18m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.3   Job          ✔ Successful  17m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.4   Job          ✔ Successful  17m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.5   Job          ✔ Successful  16m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.6   Job          ✔ Successful  16m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.7   Job          ✔ Successful  15m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.8   Job          ✔ Successful  15m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.9   Job          ✔ Successful  14m
+│     ├──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.10  Job          ✔ Successful  14m
+│     └──⊞ 20c3663f-df2b-40b2-bee1-1884e7282428.success.11  Job          ✔ Successful  13m
+└──# revision:1
+   └──⧉ webapp-rollout-c7dfb766c                            ReplicaSet   • ScaledDown  21m
+```
