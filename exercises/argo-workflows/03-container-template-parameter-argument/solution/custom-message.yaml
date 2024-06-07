@@ -13,7 +13,6 @@ spec:
     inputs:
       parameters:
         - name: message
-          value: "{{workflow.parameters.message}}"
     container:
       image: alpine:3.19.1
       command: [echo]
