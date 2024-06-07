@@ -16,7 +16,6 @@ metadata:
   generateName: hello-world-
 spec:
   entrypoint: hello-world
-
   templates:
   - name: hello-world
     container:
@@ -64,46 +63,6 @@ To retrieve the logs of the last workflow execution, run the following command.
 ```
 $ argo logs -n argo -f @latest
 custom-message-sdnjf: time="2024-02-28T16:48:49.290Z" level=info msg="capturing logs" argo=true
-custom-message-sdnjf: "Provided from the CLI"
+custom-message-sdnjf: "Hello World"
 custom-message-sdnjf: time="2024-02-28T16:48:50.291Z" level=info msg="sub-process exited" argo=true error="<nil>"
-```
-
-Copy the existing workflow YAML manifest to a new file. We are going to use `vim` here.
-
-```
-$ cp hello-world.yaml custom-message.yaml
-$ vim custom-message.yaml
-```
-
-Change the workflow definition so that it can accept a parameter named `message`. Use the parameter to render the passed in value in the `echo` command. Store the definition in a new workflow file name `custom-message.yaml` and change the name to `custom-message-`.
-
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow
-metadata:
-  generateName: custom-message-
-spec:
-  arguments:
-    parameters:
-      - name: message
-        value: Hello World!
-
-  entrypoint: hello-world
-
-  templates:
-  - name: hello-world
-    inputs:
-      parameters:
-        - name: message
-          value: "{{workflow.parameters.message}}"
-    container:
-      image: alpine:3.19.1
-      command: [echo]
-      args: ["{{inputs.parameters.message}}"]
-```
-
-Use the `-p` command line flag to pass a value for the parameter `message`. The command below provides the message "Provided from the CLI".
-
-```
-$ argo submit -n argo -p 'message="Provided from the CLI"' --watch custom-message.yaml
 ```

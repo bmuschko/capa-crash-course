@@ -1,4 +1,4 @@
-# Exercise 7
+# Exercise 8
 
 A customer provided you with a data dump in the form of JSON. You need to write a workflow that parses information from each entry in the provided JSON array. To speed up the processing procedure, execute the operation in 2 Pods in parallel.
 

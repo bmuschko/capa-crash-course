@@ -1,4 +1,4 @@
-# Exercise 5
+# Exercise 6
 
 John is a developer and finds himself writing certain templates over and over again when switching between projects. He's currently working on a Go project, and has to check out code from Git in order to build it. Help him to extract the `checkout` template into a WorkflowTemplate.
 

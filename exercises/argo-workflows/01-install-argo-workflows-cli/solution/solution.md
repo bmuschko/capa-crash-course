@@ -12,7 +12,7 @@ $ kubectl create namespace argo
 Install Argo Workflows.
 
 ```
-$ kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/download/v3.5.5/quick-start-minimal.yaml
+$ kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/download/v3.5.7/quick-start-minimal.yaml
 ```
 
 Wait for the Argo server Pod to become ready.
