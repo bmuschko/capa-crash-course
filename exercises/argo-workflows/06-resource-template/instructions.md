@@ -1,4 +1,4 @@
-# Exercise 5
+# Exercise 6
 
 Your team decides to use Argo Workflows to create a Kubernetes Deployment to the namespace `app`. In this exercise, you'll define and execute a workflow for creating the object.
 

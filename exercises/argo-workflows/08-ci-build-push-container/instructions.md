@@ -1,4 +1,4 @@
-# Exercise 7
+# Exercise 8
 
 A development team works on building and delivering a Node.js project available in a GitHub repository [bmuschko/app-frontend](https://github.com/bmuschko/app-frontend). You have been tasked with creating a workflow for checking out the code, building a container image using [buildkit](https://docs.docker.com/build/buildkit/), and pushing it to [Docker Hub](https://hub.docker.com/).
 
