@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: github-
+  namespace: playground
+spec:
+  arguments:
+    parameters:
+    - name: apiToken
+    - name: owner
+      value: argoproj
+    - name: repo
+      value: argo-workflows
+  serviceAccountName: playground-sa
+  entrypoint: main
+  templates:
+  - name: main
+    inputs:
+      parameters:
+      - name: apiToken
+      - name: owner
+      - name: repo
+    http:
+      url: "https://api.github.com/repos/{{inputs.parameters.owner}}/{{inputs.parameters.repo}}/branches?per_page=2"
+      method: "GET"
+      headers:
+      - name: "Accept"
+        value: "application/vnd.github+json"
+      - name: "Authorization"
+        value: "Bearer {{inputs.parameters.apiToken}}"
+      - name: "X-GitHub-Api-Version"
+        value: "2022-11-28"
+      successCondition: response.statusCode == 200
