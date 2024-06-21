@@ -1,5 +1,19 @@
 # Solution
 
+Create the RBAC objects from the file `workflow-rbac.yaml`.
+
+```
+$ kubectl apply -f workflow-rbac.yaml
+namespace/workflow-exec created
+serviceaccount/workflow-exec-sa created
+secret/workflow-exec-sa-token created
+rolebinding.rbac.authorization.k8s.io/workflow-exec-rb created
+role.rbac.authorization.k8s.io/agent created
+rolebinding.rbac.authorization.k8s.io/workflow-exec-rb-argo created
+clusterrole.rbac.authorization.k8s.io/read-secret-cr created
+clusterrolebinding.rbac.authorization.k8s.io/argo-read-secret created
+```
+
 First, try to perform the HTTP call via `curl`. The following command show the command in action. Make sure to provide a valid API token. The request limits the number of results to 2 items using the `per_page` parameter.
 
 ```
@@ -31,7 +45,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: github-
-  namespace: playground
+  namespace: workflow-exec
 spec:
   arguments:
     parameters:
@@ -40,7 +54,7 @@ spec:
       value: argoproj
     - name: repo
       value: argo-workflows
-  serviceAccountName: playground-sa
+  serviceAccountName: workflow-exec-sa
   entrypoint: main
   templates:
   - name: main
@@ -65,5 +79,24 @@ spec:
 Submit the workflow with the following command.
 
 ```
-$ argo submit -p apiToken=<YOUR-TOKEN> --watch -n playground github-simple-workflow.yaml
+$ argo submit -p apiToken=<YOUR-TOKEN> --watch -n workflow-exec github-simple-workflow.yaml
+Name:                github-bgsvk
+Namespace:           workflow-exec
+ServiceAccount:      workflow-exec-sa
+Status:              Succeeded
+Conditions:
+ PodRunning          False
+ Completed           True
+Created:             Fri Jun 21 11:49:21 -0600 (30 seconds ago)
+Started:             Fri Jun 21 11:49:21 -0600 (30 seconds ago)
+Finished:            Fri Jun 21 11:49:51 -0600 (now)
+Duration:            30 seconds
+Progress:            1/1
+Parameters:
+  apiToken:          ab24b9603c2f5911aaee0283a5cef478f814768d
+  owner:             argoproj
+  repo:              argo-workflows
+
+STEP             TEMPLATE  PODNAME  DURATION  MESSAGE
+ ✔ github-bgsvk  main
 ```

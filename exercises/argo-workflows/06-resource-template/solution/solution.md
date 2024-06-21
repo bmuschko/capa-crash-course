@@ -1,38 +1,9 @@
 # Solution
 
-Define the namespace, service account, and RBAC permissions, as shown below. The contents have been saved to the file `serviceaccount-permissions.yaml`.
-
-```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: app
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: app-sa
-  namespace: argo
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: app-rolebinding
-  namespace: app
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: admin
-subjects:
-- kind: ServiceAccount
-  name: app-sa
-  namespace: argo
-```
-
-Create the objects from the YAML manifest.
+Create the RBAC objects from the file `workflow-rbac.yaml`.
 
 ```
-$ kubectl apply -f serviceaccount-permissions.yaml
+$ kubectl apply -f workflow-rbac.yaml
 namespace/app created
 serviceaccount/app-sa created
 rolebinding.rbac.authorization.k8s.io/app-rolebinding created
@@ -48,20 +19,18 @@ metadata:
 spec:
   arguments:
     parameters:
-      - name: replicas
-        value: 3
-      - name: tag
-        value: 1.25.4-alpine
-
+    - name: replicas
+      value: 3
+    - name: tag
+      value: 1.25.4-alpine
   entrypoint: main
   serviceAccountName: app-sa
-
   templates:
   - name: main
     inputs:
       parameters:
-        - name: replicas
-        - name: tag
+      - name: replicas
+      - name: tag
     resource:
       action: create
       manifest: |
