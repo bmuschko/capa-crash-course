@@ -11,4 +11,4 @@ The development team wants to use data from GitHub to process data from a workfl
 1. Perform a HTTPS request using `curl` to the endpoint of the GitHub API for [retrieving a list of branches for a repository](https://docs.github.com/en/rest/branches/branches?apiVersion=2022-11-28#list-branches). Use the [Argo Workflows GitHub repository](https://github.com/argoproj/argo-workflows) for a test and provide the API token you generated for your GitHub account.
 2. Create a workflow in the namespace `argo` with the ServiceAccount `app-sa`. The workflow should accept an argument parameter for an API token, as well as repository owner and name.
 3. Enhance the workflow by defining a HTTP template that performs the call to the endpoint.
-4. Submit the workflow and have a look at the execution.
+4. Submit the workflow and inspect the execution process.
