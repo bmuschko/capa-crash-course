@@ -93,7 +93,7 @@ Finished:            Fri Jun 21 11:49:51 -0600 (now)
 Duration:            30 seconds
 Progress:            1/1
 Parameters:
-  apiToken:          ab24b9603c2f5911aaee0283a5cef478f814768d
+  apiToken:          <YOUR-TOKEN>
   owner:             argoproj
   repo:              argo-workflows
 
