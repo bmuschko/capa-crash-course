@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
-  name: webhook
+  name: webhook-sensor
 spec:
   template:
     serviceAccountName: argo-events-sa
   dependencies:
   - name: payload
-    eventSourceName: webhook
-    eventName: kubernetes
+    eventSourceName: webhook-event-source
+    eventName: pod
   triggers:
   - template:
       name: payload
